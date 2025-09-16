@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"fraud-detector/ai"
-	"fraud-detector/db"
-	"fraud-detector/models"
+	"github.com/chhandakguria/fraud_detector/ai"
+	"github.com/chhandakguria/fraud_detector/db"
+	"github.com/chhandakguria/fraud_detector/models"
 )
 
 type FraudResponse struct {
@@ -27,22 +27,14 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	tx.Timestamp = time.Now()
 	db.DB.Create(&tx)
 
-	score, reason, err := ai.ScoreTransaction(tx)
-	if err != nil {
-		http.Error(w, "AI service failed", http.StatusInternalServerError)
-		return
-	}
+	// Get AI-based fraud score
+	score, reason := ai.ScoreTransaction(tx)
 
-	status := "ok"
+	var resp FraudResponse
 	if score > 0.7 {
-		status = "fraud_suspected"
-	}
-
-	resp := FraudResponse{
-		TransactionID: tx.ID,
-		Status:        status,
-		Reason:        reason,
-		Score:         score,
+		resp = FraudResponse{TransactionID: tx.ID, Status: "fraud_suspected", Reason: reason, Score: score}
+	} else {
+		resp = FraudResponse{TransactionID: tx.ID, Status: "ok", Reason: reason, Score: score}
 	}
 
 	w.Header().Set("Content-Type", "application/json")

@@ -3,12 +3,11 @@ package db
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	"fraud-detector/models"
+	"github.com/chhandakguria/fraud_detector/models"
 )
 
 var DB *gorm.DB

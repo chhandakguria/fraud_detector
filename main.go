@@ -2,16 +2,19 @@ package main
 
 import (
 	"fmt"
+	"github.com/chhandakguria/fraud_detector/ai"
 	"log"
 	"net/http"
 
-	"fraud-detector/db"
-	"fraud-detector/router"
+	"github.com/chhandakguria/fraud_detector/db"
+	"github.com/chhandakguria/fraud_detector/router"
 )
 
 func main() {
 	// Connect DB
 	db.Connect()
+	// Initialize AI client
+	ai.InitAI()
 
 	// Setup router
 	r := router.SetupRouter()

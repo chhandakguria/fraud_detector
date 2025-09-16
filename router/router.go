@@ -1,8 +1,8 @@
 package router
 
 import (
+	"github.com/chhandakguria/fraud_detector/handlers"
 	"github.com/gorilla/mux"
-	"fraud-detector/handlers"
 )
 
 func SetupRouter() *mux.Router {
